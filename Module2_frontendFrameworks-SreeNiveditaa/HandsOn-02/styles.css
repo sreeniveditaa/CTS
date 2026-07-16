@@ -1,0 +1,295 @@
+/* CSS Reset */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* Body */
+
+body{
+
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f4f6f9;
+    color:#333;
+    line-height:1.6;
+
+}
+
+/* Header */
+
+header{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    background:#0d6efd;
+    color:white;
+
+    padding:20px;
+
+}
+
+/* Website Title */
+
+header h2{
+
+    font-size:clamp(1.5rem,3vw,2.5rem);
+
+}
+
+/* Navigation */
+
+nav ul{
+
+    display:flex;
+    list-style:none;
+    gap:20px;
+
+    flex-wrap:wrap;
+
+}
+
+nav a{
+
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+    transition:0.3s;
+
+}
+
+nav a:hover{
+
+    color:#ffd43b;
+
+}
+
+/* Hero Section */
+
+#hero{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    min-height:40vh;
+
+    background:white;
+
+    padding:50px 20px;
+
+}
+
+#hero h1{
+
+    margin-bottom:20px;
+    font-size:2.2rem;
+
+}
+
+#hero p{
+
+    max-width:700px;
+
+    margin-bottom:25px;
+
+}
+
+button{
+
+    padding:12px 25px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#0d6efd;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+}
+
+button:hover{
+
+    background:#084298;
+
+}
+
+/* Student Stats */
+
+.stats{
+
+    display:flex;
+
+    justify-content:space-evenly;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+    padding:40px 20px;
+
+    background:#e9ecef;
+
+}
+
+.stat{
+
+    flex:1;
+
+    min-width:200px;
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:10px;
+
+    text-align:center;
+
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+
+}
+
+.stat h3{
+
+    color:#0d6efd;
+
+    font-size:30px;
+
+}
+
+/* Courses */
+
+#courses{
+
+    padding:50px 30px;
+
+}
+
+#courses h2{
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+}
+
+/* Grid Layout */
+
+.course-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr;
+
+    gap:25px;
+
+}
+
+/* Course Card */
+
+.course-card{
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:10px;
+
+    box-shadow:0 3px 8px rgba(0,0,0,0.1);
+
+    min-height:180px;
+
+    transition:0.3s;
+
+}
+
+.course-card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.course-card h3{
+
+    color:#0d6efd;
+
+    margin-bottom:15px;
+
+}
+
+.course-card p{
+
+    margin-bottom:15px;
+
+}
+
+.course-card span{
+
+    font-weight:bold;
+
+}
+
+
+
+footer{
+
+    background:#0d6efd;
+
+    color:white;
+
+    text-align:center;
+
+    padding:20px;
+
+    margin-top:40px;
+
+}
+
+
+
+@media(min-width:768px){
+
+    .course-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+
+
+@media(min-width:1024px){
+
+    .course-grid{
+
+        grid-template-columns:repeat(3,1fr);
+
+    }
+
+    #hero{
+
+        padding:100px 20px;
+
+    }
+
+}
