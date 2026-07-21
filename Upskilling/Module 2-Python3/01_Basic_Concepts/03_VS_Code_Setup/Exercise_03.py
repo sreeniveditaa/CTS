@@ -1,0 +1,1 @@
+print("Python is configured successfully in VS Code!")

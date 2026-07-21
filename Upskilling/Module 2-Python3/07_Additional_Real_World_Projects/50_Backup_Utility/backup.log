@@ -1,0 +1,6 @@
+Copied: file1.txt
+Copied: file2.txt
+Copied: file3.txt
+Skipped duplicate: file1.txt
+Skipped duplicate: file2.txt
+Skipped duplicate: file3.txt

@@ -1,0 +1,14 @@
+{
+    "E101": {
+        "name": "Alice",
+        "salary": 65000
+    },
+    "E102": {
+        "name": "Bob",
+        "salary": 72000
+    },
+    "E103": {
+        "name": "Charlie",
+        "salary": 58000
+    }
+}
