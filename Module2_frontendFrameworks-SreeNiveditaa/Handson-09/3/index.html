@@ -13,9 +13,9 @@
     <header>
         <h1>Student Portal</h1>
 
-        <nav>
+        <nav aria-label="Main navigation">
             <ul>
-                <li><a href="#">Home</a></li>
+                <li><a href="#" aria-current="page">Home</a></li>
                 <li><a href="#">Courses</a></li>
                 <li><a href="#">Profile</a></li>
                 <li><a href="#">Grades</a></li>
@@ -26,7 +26,7 @@
     <main>
 
         <section id="hero">
-            <h1>Welcome to the Student Portal</h1>
+            <h2>Welcome to the Student Portal</h2>
 
             <p>
                 Access your courses, manage your profile,
@@ -36,19 +36,14 @@
 
             <button>Explore Courses</button>
         </section>
-        <section id="notifications">
-            <div>
-                <h1>Notifications</h1>
-                <button id="retry-button">retry</button>
-            </div>
-
-        </section>
         <div class="controls">
+            <label for="search-course">Search courses</label>
             <input type="text" id="search-course" placeholder="Search courses..">
             <button class="sort-button">Sort by Descending credits</button>
         </div>
         <section id="courses">
             <h2>Available Courses</h2>
+            <p id="results-count" role="status" aria-live="polite" style="margin-bottom: 1rem; color: #555;"></p>
             <div class="course-grid"></div>
             <p id="total-credits"></p>
         </section>
@@ -59,13 +54,15 @@
         <p>&copy; 2026 Student Portal. All Rights Reserved.</p>
     </footer>
 
-    <!-- use this to call api using fetch -->
     <script type="module" src="app.js"></script>
 
-    <script src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'></script>
-    <!-- use this to call api using axios -->
-    <script type="module" src="axiosApp.js"></script>
-
+    <!-- CSS Polyfill for older browsers -->
+    <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+    <script>
+        cssVars({
+            onlyLegacy: true
+        });
+    </script>
 </body>
 
 </html>

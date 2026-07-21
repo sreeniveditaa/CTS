@@ -1,326 +1,159 @@
-import { courses } from "./data.js";
+import COURSES from "./data.js";
 
-const courseGrid = document.querySelector(".course-grid");
-const notificationGrid = document.querySelector(".notification-grid");
-const totalCredits = document.querySelector("#total-credits");
-const selectedCourse = document.querySelector("#selected-course");
-const searchInput = document.querySelector("#search-courses");
-const sortBtn = document.querySelector("#sort-btn");
-
-const loading = document.querySelector("#loading");
-const errorMessage = document.querySelector("#error-message");
-const retryBtn = document.querySelector("#retry-btn");
-
-
-courses.forEach(course => {
-
-    const { name, credits } = course;
-
-    console.log(`${name} - ${credits} Credits`);
-
-});
-
-
-const formattedCourses = courses.map(course =>
-`${course.code} - ${course.name} (${course.credits} Credits)`);
-
-console.log(formattedCourses);
-
-
-const filtered = courses.filter(course => course.credits >= 4);
-
-console.log("Courses >=4 Credits:", filtered.length);
-
-
-const total = courses.reduce((sum, course) =>
-sum + course.credits, 0);
-
-totalCredits.textContent = `Total Credits : ${total}`;
-
-
-function renderCourses(courseList){
-
-    courseGrid.innerHTML = "";
-
-    courseList.forEach(course=>{
-
-        const article = document.createElement("article");
-
-        article.className = "course-card";
-
-        article.dataset.id = course.id;
-
-        article.innerHTML = `
-
-            <h3>${course.name}</h3>
-
-            <p><strong>Code :</strong> ${course.code}</p>
-
-            <p><strong>Credits :</strong> ${course.credits}</p>
-
-            <span>Grade : ${course.grade}</span>
-
-        `;
-
-        courseGrid.appendChild(article);
-
-    });
-
+function fetchUser(id) {
+    console.log("Fetched without Async");
+    fetch('https://jsonplaceholder.typicode.com/users/' + id)
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data.username);
+        })
 }
 
-renderCourses(courses);
-
-
-searchInput.addEventListener("input",()=>{
-
-    const search = searchInput.value.toLowerCase();
-
-    const result = courses.filter(course=>
-
-        course.name.toLowerCase().includes(search)
-
-    );
-
-    renderCourses(result);
-
-});
-
-
-sortBtn.addEventListener("click",()=>{
-
-    const sorted = [...courses];
-
-    sorted.sort((a,b)=>b.credits-a.credits);
-
-    renderCourses(sorted);
-
-});
-
-
-courseGrid.addEventListener("click",(event)=>{
-
-    const card = event.target.closest(".course-card");
-
-    if(!card) return;
-
-    const id = Number(card.dataset.id);
-
-    const course = courses.find(c=>c.id===id);
-
-    selectedCourse.innerHTML = `
-
-        <h3>${course.name}</h3>
-
-        <p>Course Code : ${course.code}</p>
-
-        <p>Credits : ${course.credits}</p>
-
-        <p>Grade : ${course.grade}</p>
-
-    `;
-
-});
-
-
-function fetchUser(id){
-
-    fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
-
-    .then(response=>response.json())
-
-    .then(data=>{
-
-        console.log("User Name:",data.name);
-
-    });
-
-}
 
 fetchUser(1);
 
 
-async function fetchUserAsync(id){
-
-    try{
-
-        const response = await fetch(
-        `https://jsonplaceholder.typicode.com/users/${id}`);
-
+async function fetchUserAsync(id) {
+    try {
+        console.log("Fetched using Async");
+        const response = await fetch('https://jsonplaceholder.typicode.com/users/' + id);
         const data = await response.json();
-
-        console.log("Async User:",data.name);
-
+        console.log(data.username);
+    } catch (error) {
+        console.log("Error fetching user :", error);
     }
-
-    catch(error){
-
-        console.log(error);
-
-    }
-
 }
 
-fetchUserAsync(2);
 
+fetchUserAsync(1);
 
-function fetchAllCourses(){
-
-    loading.textContent="Loading Courses...";
-
-    return new Promise(resolve=>{
-
-        setTimeout(()=>{
-
-            resolve(courses);
-
-        },1000);
-
-    });
-
+async function fetchAllCourses() {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    return COURSES;
 }
 
-fetchAllCourses().then(data=>{
 
-    renderCourses(data);
+const courseGrid = document.querySelector(".course-grid");
+const courses = [];
 
-    loading.textContent="";
+function createCourseCard(course) {
+    const article = document.createElement("article");
+    article.className = "course-card";
+    article.dataset.name = course.name;
+    article.dataset.code = course.code;
+    article.innerHTML = `
+        <h2>${course.name}</h2>
+        <p>${course.code}</p>
+        <p>${course.credits} credits</p>
+    `;
+    return article;
+}
 
-});
+function renderCourses(courses) {
+    courseGrid.replaceChildren();
+    if (courses.length < 1) {
+        courseGrid.innerHTML = "<h1>No course Found</h1>";
+        return;
+    }
+    courses.forEach((course) => courseGrid.appendChild(createCourseCard(course)));
+}
+
+function showLoading() {
+    if (courses.length < 1) {
+        courseGrid.innerHTML = "<h1>Loading...</h1>";
+    } else {
+        courseGrid.innerHTML = "";
+    }
+}
+
+
+async function loadCourses() {
+    showLoading();
+    const res = await fetchAllCourses();
+    renderCourses(res);
+}
+
+loadCourses();
+
+
+async function fetchUserIdbyPromiseAll(id) {
+    const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
+    return response.json();
+}
+
+async function fetchBothUsers() {
+    const [user1, user2] = await Promise.all([
+        fetchUser(1),
+        fetchUser(2)
+    ]);
+
+    console.log(user1.name);
+    console.log(user2.name);
+}
+
+fetchBothUsers();
 
 
 
-Promise.all([
-
-    fetch("https://jsonplaceholder.typicode.com/users/1")
-    .then(res=>res.json()),
-
-    fetch("https://jsonplaceholder.typicode.com/users/2")
-    .then(res=>res.json())
-
-]).then(users=>{
-
-    console.log(users[0].name);
-
-    console.log(users[1].name);
-
-});
+// TASK 2
 
 
-async function apiFetch(url){
+async function apiFetch(url) {
 
     const response = await fetch(url);
 
-    if(!response.ok){
-
-        throw new Error("Unable to fetch data");
-
+    if (!response.ok) {
+        throw new Error("Request failed");
     }
 
     return response.json();
 
 }
 
+let badUrl = "https://jsonplaceholder.typicode.com/posts/wrong";
 
+async function populateNotifications() {
+    const notifications = document.getElementById("notifications");
+    const retryButton = document.getElementById("retry-button");
 
-async function loadNotifications(){
+    retryButton.addEventListener("click", () => {
+        badUrl = "https://jsonplaceholder.typicode.com/posts";
+        populateNotifications();
+    });
 
-    loading.style.display="block";
+    const existingError = document.getElementById("notifications-error");
+    if (existingError) existingError.remove();
 
-    retryBtn.style.display="none";
+    let isLoading = true;
+    const loadingMsg = document.createElement("p");
+    loadingMsg.id = "notifications-loading";
+    loadingMsg.textContent = "Loading notifications...";
+    notifications.appendChild(loadingMsg);
 
-    errorMessage.textContent="";
-
-    notificationGrid.innerHTML="";
-
-    try{
-
-        const posts = await apiFetch(
-
-"https://jsonplaceholder.typicode.com/posts?_limit=6"
-
-        );
-
-        loading.style.display="none";
-
-        posts.forEach(post=>{
-
-            const card=document.createElement("div");
-
-            card.className="notification-card";
-
-            card.innerHTML=`
-
-                <h3>${post.title}</h3>
-
+    try {
+        const posts = await apiFetch(badUrl);
+        const limitedPosts = posts.slice(0, 2);
+        limitedPosts.forEach((post) => {
+            const article = document.createElement("article");
+            article.className = "notification-item";
+            article.innerHTML = `
+                <h2>${post.title}</h2>
                 <p>${post.body}</p>
-
             `;
-
-            notificationGrid.appendChild(card);
-
+            notifications.appendChild(article);
         });
-
+    } catch (error) {
+        console.log("Error fetching notifications:", error);
+        const errorMsg = document.createElement("p");
+        errorMsg.id = "notifications-error";
+        errorMsg.textContent = "Failed to load notifications.";
+        notifications.appendChild(errorMsg);
+    } finally {
+        isLoading = false;
+        const loader = document.getElementById("notifications-loading");
+        if (loader) loader.remove();
     }
-
-    catch(error){
-
-        loading.style.display="none";
-
-        errorMessage.textContent="Failed to load notifications.";
-
-        retryBtn.style.display="block";
-
-    }
-
 }
 
-loadNotifications();
-
-
-retryBtn.addEventListener("click",()=>{
-
-    loadNotifications();
-
-});
-
-
-axios.interceptors.request.use(config=>{
-
-    console.log("API Call Started:",config.url);
-
-    return config;
-
-});
-
-async function axiosPosts(){
-
-    try{
-
-        const response = await axios.get(
-
-"https://jsonplaceholder.typicode.com/posts",
-
-        {
-
-            params:{
-
-                userId:1
-
-            }
-
-        });
-
-        console.log("Axios Posts",response.data);
-
-    }
-
-    catch(error){
-
-        console.log(error);
-
-    }
-
-}
-
-axiosPosts();
+populateNotifications();
 
